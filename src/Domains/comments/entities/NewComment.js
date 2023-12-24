@@ -13,32 +13,23 @@ class NewComment {
    */
   constructor(payload) {
     this._verifyPayload(payload);
-
-    const { threadId, content, owner } = payload;
+    const { content, threadId, owner } = payload;
     this.content = content;
-    this.owner = owner;
     this.threadId = threadId;
+    this.owner = owner;
   }
 
-  _verifyPayload({ threadId, content, owner }) {
-    if (!content || !owner || !threadId) {
+  _verifyPayload(payload) {
+    const { content, threadId, owner } = payload;
+    if (!content || !threadId || !owner) {
       throw new Error('NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     }
-
     if (
       typeof content !== 'string' ||
-      typeof owner !== 'string' ||
-      typeof threadId !== 'string'
+      typeof threadId !== 'string' ||
+      typeof owner !== 'string'
     ) {
       throw new Error('NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
-    }
-
-    if (
-      content.trim().length === 0 ||
-      owner.trim().length === 0 ||
-      threadId.trim().length === 0
-    ) {
-      throw new Error('NEW_COMMENT.CANNOT_BE_EMPTY_STRING');
     }
   }
 }

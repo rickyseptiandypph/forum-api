@@ -33,6 +33,7 @@ describe('ThreadRepositoryPostgres', () => {
       const newThread = new NewThread({
         title: 'First thread',
         body: 'This is a new thread',
+        owner: userId,
       });
 
       const fakeIdGenerator = () => '123';
@@ -41,15 +42,15 @@ describe('ThreadRepositoryPostgres', () => {
         fakeIdGenerator
       );
 
-      await threadRepositoryPostgres.addNewThread(newThread, userId);
+      await threadRepositoryPostgres.addThread(newThread, userId);
 
       const addedThread = await ThreadsTableTestHelper.findThreadById(
         'thread-123'
       );
 
-      expect(addedThread).toHaveLength(1);
-      expect(addedThread[0].title).toBe(newThread.title);
-      expect(addedThread[0].body).toBe(newThread.body);
+      expect(addedThread).toBeDefined();
+      expect(addedThread.title).toBe(newThread.title);
+      expect(addedThread.body).toBe(newThread.body);
     });
   });
 

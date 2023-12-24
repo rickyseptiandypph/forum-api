@@ -1,13 +1,13 @@
+const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const NewComment = require('../../Domains/comments/entities/NewComment');
 
 class AddCommentUseCase {
-  constructor({ commentRepository, threadRepository, userRepository }) {
+  constructor({ commentRepository, threadRepository }) {
     this._commentRepository = commentRepository;
     this._threadRepository = threadRepository;
-    this._userRepository = userRepository;
   }
 
-  async execute(useCasePayload, useCaseThreadId, useCaseCredential) {
+  async execute(useCasePayload) {
     /**
      * @TODO 7
      * Tuliskan kode alur logika dalam menambahkan komentar baru yang diambil dari `useCasePayload`
@@ -22,22 +22,10 @@ class AddCommentUseCase {
      * - Kembalikan method `execute` dengan nilai yang dihasilkan dari pemanggilan
      *   fungsi `this._commentRepository.addComment(newComment);`
      */
-
-    const { content } = new NewComment(useCasePayload);
-
-    const thread = await this._threadRepository.getThreadById(useCaseThreadId);
-
-    if (!thread) {
-      throw new Error('ADD_COMMENT_USE_CASE.THREAD_NOT_FOUND');
-    }
-
-    const user = await this._userRepository.getUserById(useCaseCredential);
-
-    return await this._commentRepository.addComment(
-      content,
-      thread.id,
-      user.id
-    );
+    const newComment = new NewComment(useCasePayload);
+    await this._threadRepository.verifyAvailableThread(newComment.threadId);
+    const addedComment = await this._commentRepository.addComment(newComment);
+    return new AddedComment(addedComment);
   }
 }
 
