@@ -1,7 +1,7 @@
 {
   "user": "postgres",
   "password": "supersecretpassword",
-  "host": "forumapi.cviyw84wy0cq.ap-southeast-1.rds.amazonaws.com",
+  "host": "localhost",
   "port": 5432,
   "database": "forumapi_test"
 }
